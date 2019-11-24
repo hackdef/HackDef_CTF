@@ -1,0 +1,26 @@
+version: '3.1'
+
+services:
+  db:
+    image: mariadb/server:10.3
+    environment:
+      MYSQL_DATABASE: CaptureBankHDF
+      MYSQL_USER: root
+      MYSQL_ROOT_PASSWORD: h4ckD3f_f1n4ls2olg
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./data/CaptureBank.sql:/docker-entrypoint-initdb.d/CaptureBank.sql
+    networks:
+      - default
+  web:
+    build: .
+    container_name: goofy
+    links:
+      - db
+    ports:
+      - "8002:80"
+    volumes:
+      - ./src/:/var/www/html/
+    networks:
+      - default
