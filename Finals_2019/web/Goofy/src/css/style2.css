@@ -1,0 +1,177 @@
+body {
+  margin: 0;
+  background-color: #000000;
+  font-family: 'Ubuntu', sans-serif;
+}
+
+.topnav {
+  overflow: hidden;
+  background-color: #414141;
+}
+
+.topnav a {
+  float: left;
+  display: block;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 15px;
+}
+
+.topnav a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+.topnav a.active {
+  background-color: #ff0000;
+  color: white;
+}
+
+.topnav .icon {
+  display: none;
+}
+
+.footer {
+   position: fixed;
+   font-size: x-small;
+   left: 0;
+   bottom: 0;
+   width: 100%;
+   background-color: #414141;
+   color: white;
+   text-align: center;
+}
+
+@media screen and (max-width: 600px) {
+  .topnav a:not(:first-child) {display: none;}
+  .topnav a.icon {
+    float: right;
+    display: block;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .topnav.responsive {position: relative;}
+  .topnav.responsive .icon {
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+  .topnav.responsive a {
+    float: none;
+    display: block;
+    text-align: left;
+  }
+}
+
+select {
+  font-family:  'Ubuntu', sans-serif;
+  text-align: middle;
+}
+
+.submit {
+    cursor: pointer;
+    border-radius: 5em;
+    color: #fff;
+    background: linear-gradient(to right, #93b5b3, #c8dad3);
+    border: 0;
+    padding-left: 40px;
+    padding-right: 40px;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    font-family: 'Ubuntu', sans-serif;
+    margin-left: 35%;
+    font-size: 13px;
+    box-shadow: 0 0 20px 1px rgba(0, 0, 0, 0.04);
+}
+
+.content {
+  width: 1000px;
+  margin: 0 auto;
+}
+.content h2 {
+  margin: 0;
+  padding: 10px 0;
+  font-size: 18px;
+  border-bottom: 1px solid #e0e0e3;
+  color: #ff0000;
+}
+.content > p, .content > div {
+  box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.1);
+  margin: 25px 0;
+  padding: 25px;
+  background-color: #fff;
+}
+
+.content > p table td, .content > div table td {
+  padding: 5px;
+}
+.content > p table td:first-child, .content > div table td:first-child {
+  font-weight: bold;
+  color: #ff0000;
+  padding-right: 15px;
+  font-size: 16px;
+}
+.content > div p {
+  padding: 5px;
+  margin: 0 0 10px 0;
+}
+
+.banner {
+  background-color: #000000;
+  text-align: center;
+  display: block;
+  margin-top: auto;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.box {
+  margin-top: auto; 
+  background-color: #ffffff;
+  width: 450px;
+  height: 350px;
+  margin: 7em auto;
+}
+
+.un {
+    width: 76%;
+    color: rgb(38, 50, 56);
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 1px;
+    background: rgba(136, 126, 126, 0.04);
+    padding: 10px 20px;
+    border: none;
+    border-radius: 20px;
+    outline: none;
+    box-sizing: border-box;
+    border: 2px solid rgba(0, 0, 0, 0.02);
+    margin-bottom: 50px;
+    margin-left: 50px;
+    text-align: center;
+    margin-bottom: 27px;
+    font-family: 'Ubuntu', sans-serif;
+}
+
+.submit {
+    cursor: pointer;
+    border-radius: 5em;
+    color: #fff;
+    background: linear-gradient(to right, #ff0000, #af0404);
+    border: 0;
+    padding-left: 40px;
+    padding-right: 40px;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    font-family: 'Ubuntu', sans-serif;
+    margin-left: 35%;
+    font-size: 13px;
+    box-shadow: 0 0 20px 1px rgba(0, 0, 0, 0.04);
+    }
+
+.text{
+  text-align: center;
+}
