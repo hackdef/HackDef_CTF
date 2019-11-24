@@ -1,0 +1,4 @@
+Disallow:
+
+/gzc/synt
+
