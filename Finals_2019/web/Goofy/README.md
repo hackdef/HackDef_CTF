@@ -21,3 +21,6 @@ Happy Hacking! :)
   **`docker inspect goofy_db_1 | grep IPAddress`**
 
 * Escribirla en el archivo **`config.php`** en la variable **`DB_SERVER`**, refrescar la pestaña del browser y listo!!
+
+### Otros Recursos
+ * [Instalación Docker Compose](https://www.digitalocean.com/community/tutorials/how-to-install-docker-compose-on-ubuntu-16-04)
