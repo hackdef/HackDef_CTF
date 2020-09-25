@@ -1,11 +1,12 @@
-# WEB - HackDef4 
+# WEB 
 
 Writeups de la categoria web
 
 **Retos:**
-<ol>
-<li>Filtrado - 100pts</li>
-<li>Fisg0n - 200pts</li>
-<li>Exfil - 300pts</li>
-<li>Serial - 400pts</li>
-</ol>
+| Reto          | link                                                         |
+|---------------|--------------------------------------------------------------|
+| Filtrado (100pts)     | [**{l4_p4nd1ll4_m4nt3q1ll4}**](./100/files/filtrado.pdf) |
+| Fisg0n (200pts)         |  |
+| Exfil (300pts)|  |
+| Serial (400pts)         |  |
+  
