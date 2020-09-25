@@ -1,0 +1,26 @@
+Al ver el hint de usar dnspy, procedí a descargarlo y ver en que consistía el reto.
+Abrí el ejecutable y pude ver que aún sin saber el lenguaje de programación .NET, el debuggeador y el lenguaje era muy claro e intuitivo, y al ver que podía modificar el código libremente e ir compilandolo, procedí a hacer diferentes modificaciones para acercarme poco a poco a la bandera.
+1. Primero identifiqué la combinacion de teclas necesarias para poder entrar a la ejecución de la función Flag.
+2. Pude ver que evaluaba el texto enviado (el nombre de usuario del sistema), y que para poder continuar, debía causar una excepción, por lo que modifiqué la linea 6 de la funcion main para poder introducir ese texto por la entrada estandar y no asignara mi nombre de usuario de forma automatica.
+3. Despues identifiqué que debía causar una excepcion: una posibilidad era ingresar un texto (el que inicialmente era username) menor a 9 caracteres y causar excepcionde rango, la otra es definir un texto mayor o igual a 9 caracteres y el programa buscaría un archivo con el nombre del caracter en el indice 8. 
+4. Entre prueba y error, terminé cambiando la evaluacion de la excepcion para que ingresara al if si se causaba la excepcion del archivo inexistente.
+5. Entrando al if observé que realizaba ciertas operaciones con el error de la excepcion, la palabra ingresada (username) y un arreglo de numeros enteros, por lo que desarrollé un script que haciendo el proceso inverso me retornara la palabra que se debía ingresar. Ya que en el reto especificaba que la bandera iniciaba con hackdef{ y usaba modulo 8 a la palabra ingresada (username), deduje que la palabra clave era de 8 caracteres de largo.
+6. Como con el error con que ingresé al if no me devolvía la palabra correcta, probé cambiando el error por el de la otra excepción, y al devolverme una palabra legible (y para no modicar todos los cambios anteriores hechos al ejecutable), harcodié en array2 el error de valor fuera de rango.
+
+    error = "Index was outside the bounds of the array."
+    username = ""
+    flag = "hackdef{"
+    vals = [-47, -86, -107, -101, -83, -41, -80, -82, 13, 9, -22, -82, -68, -81, -91, -49, -80, -80, -71, -87, -30, 0, -36, -97, -12, -61, -101, -67, -94, -75, -26, -15]
+
+    for i in range(8):
+        for j in range(32, 127):
+            b = ord(error[i])
+            b ^= (j + vals[i])
+            if (ord(flag[i]) == b):
+                username += chr(j)
+                break
+            
+    print(username)
+
+
+7. Al final solo ingresé la palabra clave obtenida con caracteres de más (para entrar en el if con archivo inexistente, y ya que aplicaba modulo de 8 a los indices de la palabra, no afectaba), obteniendo así la bandera.
