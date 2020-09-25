@@ -1,0 +1,10 @@
+Al investigar en internet la forma en que se rompe el cifrado CBC vi que el bloque de cifrado anterior se utiliza para hacer la operacion xor con el bloque ya descifrado siguiente, por lo que en mis primeros intentos busqué duplicar el tamaño de la cadena cifrada (decodificandola en base64), y concatenando como primer bloque alguna cadena cifrada, que al aplicarle el xor al siguiente bloque descifrado, cambiara el numero de flipid por 6.
+Despues de investigar, descargar el codigo y relizar pruebas de forma local, me dí cuenta que los bloques eran de 16 bytes, y ya que lo cifrado era de 8, no importaban los bloques siguientes, simplemente bastaba modificar el IV para que al hacer xor con el bloque descifrado, se cambiara el id por el deseado, este caso 6.
+1. Primero identifiqué que indice del IV era el que coincidía con el numero de flipid=6. 
+2. Posteriormente hice un xor entre "A" y "4" (que es el id que me dieron) para saber con que valor se estaba haciendo xor para que diera 4
+    print chr(ord("A") ^ ord("4"))
+obteniendo "u" como resultado.
+3. Sabiendo que caracter se estaba usando para obtener 4 al hacerse xor con "A". Hice un xor entre "u" y "6" (que es el id resultante que quería obtener) para saber por que letra debía la "A" del IV
+    print chr(ord("u") ^ ord("6"))
+obteniendo como rsultado "C".
+4. Finalmente para obtener la llave, introduje el token en base64 y como IV "AAAAAAACAAAAAAAA", validandosé así la evaluación en el servidor y obteniendo la llave.
