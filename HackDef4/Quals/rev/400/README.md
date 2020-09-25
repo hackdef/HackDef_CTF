@@ -1,1 +1,1 @@
-# Validador - HackDef4 Quals 2020 (400 pts)
+# SuperValidador - HackDef4 Quals 2020 (400 pts)
