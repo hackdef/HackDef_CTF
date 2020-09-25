@@ -6,7 +6,7 @@ Writeups de la categoria web
 | Reto          | link                                                         |
 |---------------|--------------------------------------------------------------|
 | Filtrado (100pts)     | [**{l4_p4nd1ll4_m4nt3q1ll4}**](./100/files/filtrado.pdf) |
-| Fisg0n (200pts)         |  |
+| Fisg0n (200pts)       | [**{l4_p4nd1ll4_m4nt3q1ll4}**](./200/files/fisg0n.pdf) |
 | Exfil (300pts)|  |
 | Serial (400pts)         |  |
   
