@@ -1,1 +1,1 @@
-# Flipper - HackDef4 Quals 2020 (130 pts)
+# Flipper - HackDef4 Quals 2020 (300 pts)
