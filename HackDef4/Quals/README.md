@@ -1,3 +1,7 @@
 # HackDef4 - Writeups
 
-En este repo encontrarás algunos de los writeups de la ronda de calificación 
+<p align="center">
+  <img src="./images/hackdef4_logo.png">
+</p>
+
+En este repo encontrarás algunos writeups de los retos presentados en la ronda de calificación.
