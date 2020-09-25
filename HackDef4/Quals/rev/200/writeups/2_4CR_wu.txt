@@ -1,0 +1,33 @@
+Primero lo ejecuté para ver si podía deducir el funcionamiento con prueba y error.
+Primero identifiqué que a cada caracter de la cadena introducida como argumento, le correspondian dos caracteres en el cifrado que daba como salida.
+Fui probando con diversas letras y tamaños de cadenas, observando que el cifrado no dependia de la cadena completa, si no que la misma letra en la misma posicion, sin importar el tamaño de la cadena, ni las letras que había antes o despues de ella, siempre se cifraba con el mismo par de caracteres.
+Fue así como procedí hacer un script para obtener la cadena descifrada:
+1. Primero identifiqué el tamaño de la bandera, ya que el texto cifrado contenia 80 caracteres y cada caracter cifrado es de 2, el tamaño debía ser de 40.
+2. Ejecute el .exe para cada caracter imprimible de la tabla ascii con una longitud de 40, para asi obtener el cifrado de cada letra en cada posicion, guardando los resultados en una matriz, donde las filas eran los caracteres imprimibles y las columnas la posicion.
+
+    import subprocess
+    from subprocess import Popen
+
+    salidas = []
+    for i in range(32, 127):
+        p = Popen(["C2C_module.exe", chr(i)*40], stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+        output, errors = p.communicate()
+        salidas.append([output[i:i+2] for i in range(0, len(output), 2)])
+
+    with open("secret", "r") as f:
+        flag = f.readline()
+
+    flag = [flag[i:i+2] for i in range(0, len(flag), 2)]
+
+    final_flag = ""
+    for i in range(len(flag)):
+        for j in range(len(salidas)):
+            if (len(salidas[j])!=40):
+                continue
+            if flag[i] == salidas[j][i]:
+                final_flag += chr(j+32)
+                break
+
+    print (final_flag)
+
+3. Tomé el contenido de secret, y tomando los caracteres de 2 en 2, fui comparandolos con el cifrado de todos los caracteres imprimibles en la misma posición (excluyendo aquellos que no se hayan cifrado en todas las posicoines, el *), concatenando a una cadena (final_flag) el caracter con el que coincidia.
