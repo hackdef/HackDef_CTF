@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>Login Page</title>
+  <link rel="stylesheet" href="{{url_for('static', filename='/css/style.css') }}">
+
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<div id="bg"></div>
+
+{% block content %}
+    <form action="/login" method="GET" onsubmit="this.user.value=Array.from(this.user.value).map(c=>c.charCodeAt(0).toString(16)).join('');">
+        <label for="user"><h1>Hola H4x0R ingresa tu Username: </h1></label>
+        <input type="text" id="user" name="username" /><br>
+        <input type="submit" name="signup" value="Entrar" />
+    </form>
+{% endblock %}
+
+</body>
+</html>

@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+  flask:
+    build: .
+    ports:
+      - "3004:3004"
+    volumes:
+      - "./src:/projects"
+    tty: true
+    environment:
+      TZ: America/Mexico_City
+    command: flask run --host 0.0.0.0 --port 3004

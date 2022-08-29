@@ -1,0 +1,3 @@
+El reto consiste en que la flag fue cifrada caracter a caracter, aunque la llave RSA es segura,
+basicamente el texto cifrado puede ser suceptible a fuerza bruta para encontrar el valor original.
+En el script solve.py se muesrta un codigo en python que soluciona el reto.

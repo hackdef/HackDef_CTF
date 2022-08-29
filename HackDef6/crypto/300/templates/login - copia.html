@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>Login Page</title>
+  <link rel="stylesheet" href="{{url_for('static', filename='/css/style.css') }}">
+
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<div id="bg"></div>
+
+{% block content %}
+    <form action="" method="GET">
+        <label for="name"><h1>Hola H4x0R ingresa un Username en HEX: </h1></label>
+        <input type="text" id="username" name="username" /><br>
+        <input type="submit" id="send" name="signup" value="Entrar" />
+    </form>
+{% endblock %}
+
+</body>
+</html>

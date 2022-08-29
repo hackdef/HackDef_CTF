@@ -1,0 +1,1 @@
+FLAG=b"hackdef{M1cR0SofT???_rS4_bUgs_3v3rywheR3}"
