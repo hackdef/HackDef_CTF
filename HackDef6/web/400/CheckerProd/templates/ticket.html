@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block body %}
+
+
+    <div class="jumbotron">
+        <h3 class="card-title mb-3">Ticket número: {{ ticket.id }}</h3>
+        <hr>
+        <h5 class="card-subtitle mb-3">Título: {{ ticket.title }}</h5>
+        <h6 class="card-subtitle mb-2  text-muted">Equipo que reporta: {{ ticket.team }}</h6>
+        <p class="card-text mb-3">Especificación del problema: {{ ticket.details }}</p>
+    </div>
+    <br>
+{% endblock %}

@@ -1,0 +1,21 @@
+version: "3"
+services:
+  app:
+    container_name: nologin
+    restart: always
+    build: .
+    ports:
+      - "3006:3006"
+    links:
+      - mongo
+  mongo:
+    hostname: mongo
+    container_name: mongo
+    image: mongo
+    environment:
+      - MONGO_INITDB_DATABASE=regextro
+    volumes:
+      - ./init-db.js:/docker-entrypoint-initdb.d/init-db.js:ro
+    command: mongod --port 27018
+    ports:
+        - '27018:27018'

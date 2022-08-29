@@ -1,0 +1,4 @@
+bcrypt==3.2.2
+Flask==2.0.3
+Flask-PyMongo==2.3.0
+waitress==2.0.0

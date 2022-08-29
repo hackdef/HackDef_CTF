@@ -1,0 +1,45 @@
+{% extends "layout.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block body %}
+    <div class="jumbotron m-5">
+        <h2>Registro</h2>
+        <hr>
+        <div class="container">
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <ul class=flashes>
+                        {% for message in messages %}
+                            <li>{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            {% endwith %}
+            <form class="form-signin" action="/signup" method="post">
+                <label for="inputName">Nombre de usuario:</label>
+                <input type="name" name="username" id="inputName" class="form-control" placeholder="Username" required
+                       autofocus>
+                <br>
+                <label for="inputEmail">Equipo:</label>
+                <select name="team" id="team" class="form-control" placeholder="Equipo">
+                    <option value=""></option>
+                    {% for team in teamsList %}
+                        <option value="{{ team }}">{{ team }}</option>
+                    {% endfor %}
+                </select>
+                <br>
+                <label for="inputPassword">Password</label>
+                <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Password"
+                       required>
+                <br>
+                <br>
+                <button id="btnSignUp" class="btn btn-lg btn-success btn-block" onclick='this.form.submit();'
+                        type="button">Registrarse
+                </button>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+
+

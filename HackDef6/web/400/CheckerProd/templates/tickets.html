@@ -1,0 +1,19 @@
+{% extends "layout.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block body %}
+    {% for ticket in tickets %}
+        <div class="card" >
+            <div class="card-body">
+                <h4 class="card-title mb-3"><a href="/ticket/{{ticket.id}}">Ticket número: {{ticket.id}}</a></h4>
+                <h5 class="card-subtitle mb-3">Título: {{ticket.title}}</h5>
+                <h6 class="card-subtitle mb-2  text-muted">Equipo chillón: {{ticket.team}}</h6>
+                <p class="card-text mb-3">Mentiras que cuenta el equipo: {{ticket.details}}</p>
+            </div>
+        </div>
+        <br>
+    {% endfor %}
+{% endblock %}
+
+

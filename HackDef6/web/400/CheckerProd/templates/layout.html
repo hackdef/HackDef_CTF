@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css"
+          integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Formal Ticketador</title>
+</head>
+<body class="" style="background-image: url('/static/ac97v6rl.bmp')">
+<div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 nav-custom">
+    <h5 class="my-0 mr-md-auto  text-white font-weight-normal "></h5>
+    <nav class="my-2 my-md-0 mr-md-3">
+        {% if not username is defined %}
+            <a class="p-2  text-white" href="/login">Log In</a>
+            <a class="p-2  text-white" href="/signup">Registrarse</a>
+        {% else %}
+            <a class="p-2  text-white" href="/tickets">Tickets Públicos</a>
+            <a class="p-2  text-white" href="/new_ticket">Nuevo ticket</a>
+            <a class="p-2  text-white" href="/logout">Logout</a>
+        {% endif %}
+    </nav>
+</div >
+<div class="container ">
+    {% block body %}{% endblock %}
+</div>
+<footer class="text-center text-white">Creado por HackDefender.</footer>
+</body>
+</html>

@@ -1,0 +1,41 @@
+{% extends "layout.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block body %}
+    <div class="jumbotron">
+        <h2>Nuevo ticket</h2>
+        <hr>
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <ul class=flashes>
+                    {% for message in messages %}
+                        <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+        <form class="form-signin" action="/new_ticket" method="post">
+            <label for="inputName">Titulo ticket: </label>
+            <input  name="title" id="title" class="form-control" placeholder="Titulo" required
+                   autofocus>
+            <br>
+            <label for="inputPassword">Detalles:</label>
+            <textarea name="details" id="details" class="form-control" placeholder="Pon más detalles del problema"
+                      required></textarea>
+            <br>
+            <label for="inputPassword">Tipo:</label>
+             <select name="type" id="type"class="form-control" placeholder="Equipo">
+                    <option value="pub">Público</option>
+                    <option value="priv">Privado</option>
+                </select>
+            <br>
+            <br>
+            <button id="btnSignUp" class="btn btn-lg btn-success btn-block" onclick='this.form.submit();' type="button">
+                Crear
+            </button>
+        </form>
+    </div>
+{% endblock %}
+
+

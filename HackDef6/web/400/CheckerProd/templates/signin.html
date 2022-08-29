@@ -1,0 +1,34 @@
+{% extends "layout.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block body %}
+    <div class="jumbotron">
+        <h2 >Login</h2>
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <ul class=flashes>
+                    {% for message in messages %}
+                        <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+        <hr>
+        <form class="form-signin" action="/login" method="post">
+            <label for="inputName">Nombre de Usuario:</label>
+            <input type="name" name="username" id="inputName" class="form-control" placeholder="Username" required
+                   autofocus>
+            <br>
+            <label for="inputPassword">Password</label>
+            <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Password"
+                   required>
+            <br>
+            <button id="btnSignUp" class="btn btn-lg btn-success btn-block" onclick='this.form.submit();' type="button">
+                Login
+            </button>
+        </form>
+    </div>
+{% endblock %}
+
+
