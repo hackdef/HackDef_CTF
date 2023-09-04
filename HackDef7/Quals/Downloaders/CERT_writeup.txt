@@ -1,0 +1,60 @@
+Descripcion: acabas de descubrir un primer stage con el que OCELOT-APT ditribuye su malware, podras DECODEARlo hasta el final?
+parece que les gustan los LOLBINS y los CERTificados.
+
+Nombre:STAGE{0}
+
+
+FLAG: hackdef{ocelot_apt_babypayload}
+
+WRITEUP:
+Se debe hacer reversing y encontrar la llave XOR en el codigo fuente y decodear
+la cadena resultante se descifra con el rot 1337 (este se resulve con aplicando -1337 veces la rotacion) o como es repetitiva sin problema pueden reducirla a unas 25 posibilidades
+si no quieren hacer la operacion exacta de las rotaciones extras
+
+ahora deben pasar a decodear la cadena con el shiftkeyboar cipher personalizado(esta inspirado en el teclado DEVORAK)se decifra con el algoritmo de shift keyboard a mano o reusando el codigo
+
+
+Codigo para la solucion del Shift keyboard:
+
+   static string Encrypt(string plaintext, int shift)
+    {
+        Dictionary<char, char> keyboardShiftMapping = CreateKeyboardShiftMapping(shift);
+        string encryptedText = "";
+
+        foreach (char character in plaintext)
+        {
+            if (keyboardShiftMapping.ContainsKey(character))
+            {
+                encryptedText += keyboardShiftMapping[character];
+            }
+            else
+            {
+                encryptedText += character;
+            }
+        }
+
+        return encryptedText;
+    }
+
+        String diccion = "!_}wvz0123456789SsWVZAXJE>UIDCHTNMBRLPOYGKQF{axje.uidchtnmbrlpoygkqf?";
+        String var = "wku!nX:rub_mcw.fbckfl0uql0yuy?qu?kfum1";
+        int cont = 0;
+        String Flag = "";
+        for (int j = 0; j < var.Length; j++)
+        {
+            for (int i = 0; i < diccion.Length; i++)
+            {
+
+                String resultado = Encrypt(diccion[i].ToString(), 5);
+                if (resultado == var[j].ToString())
+                {
+                    Flag += diccion[i];
+
+                }
+
+            }
+            cont++;
+        }
+        Console.WriteLine("FLAG: "+Flag);
+
+//FLAG: flagishackdef{ocelot_apt_babypayload}
