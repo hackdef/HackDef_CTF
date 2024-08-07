@@ -1,0 +1,1 @@
+Writeups del Quals round
