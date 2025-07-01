@@ -7,10 +7,9 @@ This is a quick Linux Cheat sheet to troubleshoot problems in Linux servers
 5. subprocess.run("du -sh /path/to/dir", shell=True)        # Directory size
 6. subprocess.run("top -b -n 1", shell=True)                # One-time snapshot of running processes
 7. subprocess.run("w", shell=True)                          # User sessions and activity
-8. subprocess.run("env > /home/oai/share/env.txt", shell=True)  # Environment variables
+8. subprocess.run("env > /tmp/env.txt", shell=True)  # Environment variables
 9. subprocess.run("who", shell=True)                        # Logged-in users
-10. Troubleshooting server:
-```    
+10. subprocess.run("    
 import http.server
 import socketserver
 import urllib.parse
@@ -80,5 +79,5 @@ def run_server():
 
 if __name__ == "__main__":
     run_server()
-```
+", shell=True)                        # Troubleshooting server
 12. subprocess.run("ps aux", shell=True)                     # All running processes
