@@ -9,7 +9,8 @@ This is a quick Linux Cheat sheet to troubleshoot problems in Linux servers
 7. subprocess.run("w", shell=True)                          # User sessions and activity
 8. subprocess.run("env > /tmp/env.txt", shell=True)  # Environment variables
 9. subprocess.run("who", shell=True)                        # Logged-in users
-10. Trobleshooting server:
+10. Trobleshooting server code below:
+```
 import subprocess
 import time
 # Define the server code as a string
@@ -80,3 +81,4 @@ server_process = subprocess.Popen(
 
 print(f"Server started in background with PID {server_process.pid}")
 print("You can now continue with other tasks...")
+```
