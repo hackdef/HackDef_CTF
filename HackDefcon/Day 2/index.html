@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>System Diagnostics - 2025</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>HackDefCon System Diagnostics</h1>
+    <p>Report generated on: <span id="timestamp"></span></p>
+    <div class="diagnostic-box">
+      <h2>Status Log:</h2>
+      <pre>
+[INFO] Starting process scan...
+[OK] Found 123 running processes
+[INFO] Checking system entropy...
+[OK] Entropy level normal
+[INFO] Fetching external signatures...
+[OK] No known threats detected
+<!-- Hint (XOR Encoded): 00101011 00110001 00000110 00100000 00000011 01001000 01001100 00000100 00001101 -->
+<!-- XOR key: 19 -->
+      </pre>
+    </div>
+  </div>
+  <script>
+    document.getElementById("timestamp").innerText = new Date().toUTCString();
+  </script>
+</body>
+</html>
