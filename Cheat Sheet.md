@@ -1,8 +1,9 @@
 This is a quick Linux Cheat sheet to troubleshoot problems in Linux servers
 
 1. from pyodide.ffi import create_proxy
-from js import eval as js_eval
 ```
+from js import eval as js_eval
+
 python_code = """
 print("Hello from dynamically executed Python!")
 x = 42 + 8
